@@ -6,8 +6,8 @@ class Stock:
 
     def __init__(self, name, shares, price):
         self.name = name
-        self._shares = shares
-        self._price = price
+        self.shares = shares
+        self.price = price
 
     @classmethod
     def from_row(cls, row):
