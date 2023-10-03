@@ -6,13 +6,37 @@ class Stock:
 
     def __init__(self, name, shares, price):
         self.name = name
-        self.shares = shares
-        self.price = price
+        self._shares = shares
+        self._price = price
 
     @classmethod
     def from_row(cls, row):
         values = [func(val) for func, val in zip(cls._types, row)]
         return cls(*values)
+
+    @property
+    def shares(self):
+        return self._shares
+
+    @shares.setter
+    def shares(self, value):
+        if not isinstance(value, int):
+            raise TypeError("Expected int")
+        if value < 0:
+            raise ValueError("shares must be >= 0")
+        self._shares = value
+
+    @property
+    def price(self):
+        return self._price
+
+    @price.setter
+    def price(self, value):
+        if not isinstance(value, float):
+            raise TypeError("Expected float")
+        if value < 0:
+            raise ValueError("price must be >= 0")
+        self._price = value
 
     @property
     def cost(self):
