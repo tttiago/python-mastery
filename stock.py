@@ -21,15 +21,6 @@ class Stock:
         self.shares -= shares
 
 
-def read_portfolio(filename):
-    """Read a CSV file of stock data into a list of Stocks."""
-    with open(filename) as f:
-        rows = csv.reader(f)
-        headers = next(rows)
-        portfolio = [Stock.from_row(row) for row in rows]
-    return portfolio
-
-
 def print_portfolio(portfolio):
     """Make a nicely formatted table showing stock data."""
     print(f"{'name':>10} {'shares':>10} {'price':>10}")
@@ -39,5 +30,7 @@ def print_portfolio(portfolio):
 
 
 if __name__ == "__main__":
-    portfolio = read_portfolio("Data/portfolio.csv")
+    from reader import read_csv_as_instances
+
+    portfolio = read_csv_as_instances("Data/portfolio.csv", Stock)
     print_portfolio(portfolio)
