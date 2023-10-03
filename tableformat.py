@@ -1,13 +1,9 @@
-def print_table(objects, headers):
+def print_table(records, headers):
     """Make a nicely formatted table from arbitrary data."""
-    for header in headers:
-        print(f"{header:>10}", end=" ")
-    print()
+    print(" ".join(f"{header:>10}" for header in headers))
     print((("-" * 10) + " ") * len(headers))
-    for object in objects:
-        for header in headers:
-            print(f"{getattr(object, header):>10}", end=" ")
-        print()
+    for record in records:
+        print(" ".join(f"{getattr(record, header):>10}" for header in headers))
 
 
 if __name__ == "__main__":
