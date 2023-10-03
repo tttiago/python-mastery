@@ -26,7 +26,7 @@ def read_portfolio(filename):
 def print_portfolio(portfolio):
     """Make a nicely formatted table showing stock data."""
     print(f"{'name':>10} {'shares':>10} {'price':>10}")
-    print(("-" * 10) * 3)
+    print((("-" * 10) + " ") * 3)
     for s in portfolio:
         print(f"{s.name:>10} {s.shares:10} {s.price:10.2f}")
 
