@@ -2,7 +2,7 @@ import csv
 
 
 class Stock:
-    types = (str, int, float)
+    _types = (str, int, float)
 
     def __init__(self, name, shares, price):
         self.name = name
@@ -11,7 +11,7 @@ class Stock:
 
     @classmethod
     def from_row(cls, row):
-        values = [func(val) for func, val in zip(cls.types, row)]
+        values = [func(val) for func, val in zip(cls._types, row)]
         return cls(*values)
 
     def cost(self):
