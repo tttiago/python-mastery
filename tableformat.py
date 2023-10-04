@@ -31,6 +31,17 @@ class HTMLTableFormatter(TableFormatter):
         print("<tr> <td>" + "</td> <td>".join(str(d) for d in rowdata) + "</td> </tr>")
 
 
+def create_formatter(name):
+    if name.lower() == "text":
+        return TextTableFormatter()
+    elif name.lower() == "csv":
+        return CSVTableFormatter()
+    elif name.lower() == "html":
+        return HTMLTableFormatter()
+    else:
+        raise RuntimeError(f"Unknown format {name}")
+
+
 def print_table(records, fields, formatter):
     """Make a nicely formatted table from arbitrary data."""
     formatter.headings(fields)
@@ -44,8 +55,5 @@ if __name__ == "__main__":
     import stock
 
     portfolio = reader.read_csv_as_instances("Data/portfolio.csv", stock.Stock)
-    formatter = CSVTableFormatter()
-    print_table(portfolio, ["name", "shares", "price"], formatter)
-    print()
-    formatter = HTMLTableFormatter()
+    formatter = create_formatter("html")
     print_table(portfolio, ["name", "shares", "price"], formatter)
