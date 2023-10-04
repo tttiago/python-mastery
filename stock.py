@@ -21,8 +21,8 @@ class Stock:
 
     @shares.setter
     def shares(self, value):
-        if not isinstance(value, int):
-            raise TypeError("Expected int")
+        if not isinstance(value, self._types[1]):
+            raise TypeError(f"Expected a {self._types[1].__name__}")
         if value < 0:
             raise ValueError("shares must be >= 0")
         self._shares = value
@@ -33,8 +33,8 @@ class Stock:
 
     @price.setter
     def price(self, value):
-        if not isinstance(value, float):
-            raise TypeError("Expected float")
+        if not isinstance(value, self._types[2]):
+            raise TypeError(f"Expected a {self._types[2].__name__}")
         if value < 0:
             raise ValueError("price must be >= 0")
         self._price = value
@@ -43,8 +43,8 @@ class Stock:
     def cost(self):
         return self.shares * self.price
 
-    def sell(self, shares):
-        self.shares -= shares
+    def sell(self, nshares):
+        self.shares -= nshares
 
 
 def print_portfolio(portfolio):
