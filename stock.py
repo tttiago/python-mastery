@@ -2,6 +2,7 @@ import csv
 
 
 class Stock:
+    __slots__ = ("name", "_shares", "_price")
     _types = (str, int, float)
 
     def __init__(self, name, shares, price):
