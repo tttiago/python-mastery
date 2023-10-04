@@ -6,6 +6,15 @@ class TableFormatter:
         raise NotImplementedError()
 
 
+class TextTableFormatter(TableFormatter):
+    def headings(self, headers):
+        print(" ".join(f"{h:>10}" for h in headers))
+        print((("-" * 10) + " ") * len(headers))
+
+    def row(self, rowdata):
+        print(" ".join(f"{d:>10}" for d in rowdata))
+
+
 def print_table(records, fields, formatter):
     """Make a nicely formatted table from arbitrary data."""
     formatter.headings(fields)
@@ -19,5 +28,5 @@ if __name__ == "__main__":
     import stock
 
     portfolio = reader.read_csv_as_instances("Data/portfolio.csv", stock.Stock)
-    formatter = TableFormatter()
+    formatter = TextTableFormatter()
     print_table(portfolio, ["name", "shares", "price"], formatter)
