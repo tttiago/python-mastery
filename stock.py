@@ -1,6 +1,3 @@
-import csv
-
-
 class Stock:
     __slots__ = ("name", "_shares", "_price")
     _types = (str, int, float)
@@ -9,6 +6,9 @@ class Stock:
         self.name = name
         self.shares = shares
         self.price = price
+
+    def __repr__(self):
+        return f"{type(self).__name__}({self.name!r}, {self.shares!r}, {self.price!r})"
 
     @classmethod
     def from_row(cls, row):
