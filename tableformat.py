@@ -1,15 +1,23 @@
-def print_table(records, headers):
+class TableFormatter:
+    def headings(self, headers):
+        raise NotImplementedError()
+
+    def row(self, rowdata):
+        raise NotImplementedError()
+
+
+def print_table(records, fields, formatter):
     """Make a nicely formatted table from arbitrary data."""
-    print(" ".join(f"{header:>10}" for header in headers))
-    print((("-" * 10) + " ") * len(headers))
-    for record in records:
-        print(" ".join(f"{getattr(record, header):>10}" for header in headers))
+    formatter.headings(fields)
+    for r in records:
+        rowdata = [getattr(r, fieldname) for fieldname in fields]
+        formatter.row(rowdata)
 
 
 if __name__ == "__main__":
+    import reader
     import stock
 
-    portfolio = stock.read_portfolio("Data/portfolio.csv")
-    print_table(portfolio, ["name", "shares", "price"])
-    print()
-    print_table(portfolio, ["shares", "name"])
+    portfolio = reader.read_csv_as_instances("Data/portfolio.csv", stock.Stock)
+    formatter = TableFormatter()
+    print_table(portfolio, ["name", "shares", "price"], formatter)
