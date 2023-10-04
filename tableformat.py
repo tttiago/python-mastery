@@ -15,6 +15,22 @@ class TextTableFormatter(TableFormatter):
         print(" ".join(f"{d:>10}" for d in rowdata))
 
 
+class CSVTableFormatter(TableFormatter):
+    def headings(self, headers):
+        print(",".join(headers))
+
+    def row(self, rowdata):
+        print(",".join(str(d) for d in rowdata))
+
+
+class HTMLTableFormatter(TableFormatter):
+    def headings(self, headers):
+        print("<tr> <th>" + "</th> <th>".join(headers) + "</th> </tr>")
+
+    def row(self, rowdata):
+        print("<tr> <td>" + "</td> <td>".join(str(d) for d in rowdata) + "</td> </tr>")
+
+
 def print_table(records, fields, formatter):
     """Make a nicely formatted table from arbitrary data."""
     formatter.headings(fields)
@@ -28,5 +44,8 @@ if __name__ == "__main__":
     import stock
 
     portfolio = reader.read_csv_as_instances("Data/portfolio.csv", stock.Stock)
-    formatter = TextTableFormatter()
+    formatter = CSVTableFormatter()
+    print_table(portfolio, ["name", "shares", "price"], formatter)
+    print()
+    formatter = HTMLTableFormatter()
     print_table(portfolio, ["name", "shares", "price"], formatter)
