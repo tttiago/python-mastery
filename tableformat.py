@@ -44,6 +44,9 @@ def create_formatter(name):
 
 def print_table(records, fields, formatter):
     """Make a nicely formatted table from arbitrary data."""
+    if not isinstance(formatter, TableFormatter):
+        raise TypeError("Expected a TableFormatter")
+
     formatter.headings(fields)
     for r in records:
         rowdata = [getattr(r, fieldname) for fieldname in fields]
