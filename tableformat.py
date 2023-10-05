@@ -1,7 +1,12 @@
-class TableFormatter:
+from abc import ABC, abstractmethod
+
+
+class TableFormatter(ABC):
+    @abstractmethod
     def headings(self, headers):
         raise NotImplementedError()
 
+    @abstractmethod
     def row(self, rowdata):
         raise NotImplementedError()
 
