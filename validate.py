@@ -1,7 +1,13 @@
 class Validator:
+    def __init__(self, name):
+        self.name = name
+
     @classmethod
     def check(cls, value):
         return value
+
+    def __set__(self, instance, value):
+        instance.__dict__[self.name] = self.check(value)
 
 
 class Typed(Validator):
@@ -57,7 +63,10 @@ class NonEmptyString(String, NonEmpty):
 if __name__ == "__main__":
 
     class Stock:
-        __slots__ = ("name", "_shares", "_price")
+        name = String("name")
+        shares = PositiveInteger("shares")
+        price = PositiveFloat("price")
+
         _types = (str, int, float)
 
         def __init__(self, name, shares, price):
@@ -77,22 +86,6 @@ if __name__ == "__main__":
         def from_row(cls, row):
             values = [func(val) for func, val in zip(cls._types, row)]
             return cls(*values)
-
-        @property
-        def shares(self):
-            return self._shares
-
-        @shares.setter
-        def shares(self, value):
-            self._shares = PositiveInteger.check(value)
-
-        @property
-        def price(self):
-            return self._price
-
-        @price.setter
-        def price(self, value):
-            self._price = PositiveFloat.check(value)
 
         @property
         def cost(self):
