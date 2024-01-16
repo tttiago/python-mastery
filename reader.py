@@ -1,7 +1,10 @@
 import csv
+from typing import Any, Callable, Optional, Type
 
 
-def read_csv_as_dicts(filename, types, *, headers=None):
+def read_csv_as_dicts(
+    filename: str, types: list[Type[Callable[[str], Any]]], *, headers: Optional[list[str]] = None
+) -> list[dict[str, Any]]:
     """
     Read CSV data into a list of dictionaries with optional type conversion.
     """
@@ -9,7 +12,9 @@ def read_csv_as_dicts(filename, types, *, headers=None):
         return csv_as_dicts(file, types, headers=headers)
 
 
-def read_csv_as_instances(filename, cls, *, headers=None):
+def read_csv_as_instances(
+    filename: str, cls: Type, *, headers: Optional[list[str]] = None
+) -> list[Any]:
     """
     Read CSV data into a list of instances.
     """
@@ -17,7 +22,9 @@ def read_csv_as_instances(filename, cls, *, headers=None):
         return csv_as_instances(file, cls, headers=headers)
 
 
-def csv_as_dicts(lines, types, *, headers=None):
+def csv_as_dicts(
+    lines: Any, types: list[Type[Callable[[str], Any]]], *, headers: Optional[list[str]] = None
+) -> list[dict[str, Any]]:
     """
     Transform CSV lines into a list of dictionaries with optional type conversion.
     """
@@ -31,7 +38,7 @@ def csv_as_dicts(lines, types, *, headers=None):
     return records
 
 
-def csv_as_instances(lines, cls, *, headers=None):
+def csv_as_instances(lines: Any, cls: Type, *, headers: Optional[list[str]] = None) -> list[Any]:
     """
     Transform CSV lines into a list of instances.
     """
