@@ -2,6 +2,40 @@ import csv
 from typing import Any, Callable, Optional, Type
 
 
+def convert_csv(lines, conv_func, *, headers=None):
+    """
+    Convert CSV lines using a conversion function.
+    """
+    records = []
+    rows = csv.reader(lines)
+    if headers is None:
+        headers = next(rows)
+    for row in rows:
+        record = conv_func(headers, row)
+        records.append(record)
+    return records
+
+
+def csv_as_dicts(
+    lines: Any, types: list[Type[Callable[[str], Any]]], *, headers: Optional[list[str]] = None
+) -> list[dict[str, Any]]:
+    """
+    Transform CSV lines into a list of dictionaries with optional type conversion.
+    """
+    return convert_csv(
+        lines,
+        lambda headers, row: {name: func(val) for name, func, val in zip(headers, types, row)},
+        headers=headers,
+    )
+
+
+def csv_as_instances(lines: Any, cls: Type, *, headers: Optional[list[str]] = None) -> list[Any]:
+    """
+    Transform CSV lines into a list of instances.
+    """
+    return convert_csv(lines, lambda headers, row: cls.from_row(row))
+
+
 def read_csv_as_dicts(
     filename: str, types: list[Type[Callable[[str], Any]]], *, headers: Optional[list[str]] = None
 ) -> list[dict[str, Any]]:
@@ -20,33 +54,3 @@ def read_csv_as_instances(
     """
     with open(filename) as file:
         return csv_as_instances(file, cls, headers=headers)
-
-
-def csv_as_dicts(
-    lines: Any, types: list[Type[Callable[[str], Any]]], *, headers: Optional[list[str]] = None
-) -> list[dict[str, Any]]:
-    """
-    Transform CSV lines into a list of dictionaries with optional type conversion.
-    """
-    records = []
-    rows = csv.reader(lines)
-    if headers is None:
-        headers = next(rows)
-    for row in rows:
-        record = {name: func(val) for name, func, val in zip(headers, types, row)}
-        records.append(record)
-    return records
-
-
-def csv_as_instances(lines: Any, cls: Type, *, headers: Optional[list[str]] = None) -> list[Any]:
-    """
-    Transform CSV lines into a list of instances.
-    """
-    records = []
-    rows = csv.reader(lines)
-    if headers is None:
-        headers = next(rows)
-    for row in rows:
-        record = cls.from_row(row)
-        records.append(record)
-    return records
