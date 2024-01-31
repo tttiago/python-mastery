@@ -9,7 +9,7 @@ def convert_csv(lines, conv_func, *, headers=None):
     rows = csv.reader(lines)
     if headers is None:
         headers = next(rows)
-    return map(lambda row: conv_func(headers, row), rows)
+    return list(map(lambda row: conv_func(headers, row), rows))
 
 
 def csv_as_dicts(
