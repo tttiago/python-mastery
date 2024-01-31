@@ -40,6 +40,31 @@ class TestStock(unittest.TestCase):
         s2 = stock.Stock("GOOG", 100, 490.1)
         self.assertEqual(s1, s2)
 
+    def test_shares_badtype(self):
+        s = stock.Stock("GOOG", 100, 490.1)
+        with self.assertRaises(TypeError):
+            s.shares = "50"
+
+    def test_shares_badvalue(self):
+        s = stock.Stock("GOOG", 100, 490.1)
+        with self.assertRaises(ValueError):
+            s.shares = -10
+
+    def test_price_badtype(self):
+        s = stock.Stock("GOOG", 100, 490.1)
+        with self.assertRaises(TypeError):
+            s.price = "490.1"
+
+    def test_price_badvalue(self):
+        s = stock.Stock("GOOG", 100, 490.1)
+        with self.assertRaises(ValueError):
+            s.price = -490.1
+
+    def test_bad_attribute(self):
+        s = stock.Stock("GOOG", 100, 490.1)
+        with self.assertRaises(AttributeError):
+            s.share = 100
+
 
 if __name__ == "__main__":
     unittest.main()
