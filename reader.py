@@ -6,10 +6,16 @@ def convert_csv(lines, conv_func, *, headers=None):
     """
     Convert CSV lines using a conversion function.
     """
+    records = []
     rows = csv.reader(lines)
     if headers is None:
         headers = next(rows)
-    return list(map(lambda row: conv_func(headers, row), rows))
+    for rowno, row in enumerate(rows):
+        try:
+            records.append(conv_func(headers, row))
+        except ValueError as e:
+            print(f"Row {rowno}: Bad row: {row}")
+    return records
 
 
 def csv_as_dicts(
