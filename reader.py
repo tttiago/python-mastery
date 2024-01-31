@@ -1,5 +1,8 @@
 import csv
+import logging
 from typing import Any, Callable, Optional, Type
+
+log = logging.getLogger(__name__)
 
 
 def convert_csv(lines, conv_func, *, headers=None):
@@ -14,7 +17,8 @@ def convert_csv(lines, conv_func, *, headers=None):
         try:
             records.append(conv_func(headers, row))
         except ValueError as e:
-            print(f"Row {rowno}: Bad row: {row}")
+            log.warning(f"Row {rowno}: Bad row: {row}")
+            log.debug(f"Row {rowno}: Reason: {e}")
     return records
 
 
