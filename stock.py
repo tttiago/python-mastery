@@ -2,10 +2,8 @@ from structure import Structure
 
 
 class Stock(Structure):
+    _fields = ("name", "shares", "price")
     _types = (str, int, float)
-
-    def __init__(self, name, shares, price):
-        self._init()
 
     def __eq__(self, other):
         return isinstance(other, Stock) and (
@@ -49,4 +47,4 @@ class Stock(Structure):
         self.shares -= nshares
 
 
-Stock.set_fields()
+Stock.create_init()

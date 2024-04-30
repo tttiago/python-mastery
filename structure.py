@@ -23,6 +23,10 @@ class Structure:
             raise AttributeError(f"No attribute {name}")
 
     @classmethod
-    def set_fields(cls):
-        sig = inspect.signature(cls)
-        cls._fields = tuple(sig.parameters)
+    def create_init(cls):
+        code = f"def __init__(self, {', '.join(cls._fields)}):"
+        for name in cls._fields:
+            code += f"\n    self.{name} = {name}"
+        locs = {}
+        exec(code, locs)
+        cls.__init__ = locs["__init__"]
