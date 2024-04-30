@@ -2,7 +2,6 @@ from structure import Structure
 
 
 class Stock(Structure):
-    _fields = ("name", "shares", "price")
     _types = (str, int, float)
 
     def __init__(self, name, shares, price):
@@ -48,3 +47,6 @@ class Stock(Structure):
 
     def sell(self, nshares):
         self.shares -= nshares
+
+
+Stock.set_fields()
