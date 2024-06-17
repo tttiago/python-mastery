@@ -1,3 +1,4 @@
+from functools import wraps
 from inspect import signature
 
 
@@ -71,6 +72,7 @@ def validated(func):
     annotations = dict(func.__annotations__)
     retcheck = annotations.pop("return", None)
 
+    @wraps(func)
     def wrapper(*args, **kwargs):
         bound = sig.bind(*args, **kwargs)
         errors = []
