@@ -66,25 +66,34 @@ class NonEmptyString(String, NonEmpty):
     pass
 
 
-class ValidatedFunction:
-    def __init__(self, func):
-        self.func = func
-        self.signature = signature(func)
-        self.annotations = dict(func.__annotations__)
-        self.retcheck = self.annotations.pop("return", None)
+def validated(func):
+    sig = signature(func)
+    annotations = dict(func.__annotations__)
+    retcheck = annotations.pop("return", None)
 
-    def __call__(self, *args, **kwargs):
-        bound = self.signature.bind(*args, **kwargs)
+    def wrapper(*args, **kwargs):
+        bound = sig.bind(*args, **kwargs)
+        errors = []
+        for name, validator in annotations.items():
+            try:
+                validator.check(bound.arguments[name])
+            except Exception as e:
+                errors.append(f"    {name}: {e}")
 
-        for name, val in self.annotations.items():
-            val.check(bound.arguments[name])
+        if errors:
+            raise TypeError("Bad Arguments\n" + "\n".join(errors))
 
-        result = self.func(*args, **kwargs)
+        result = func(*args, **kwargs)
 
-        if self.retcheck:
-            self.retcheck.check(result)
+        if retcheck:
+            try:
+                retcheck.check(result)
+            except Exception as e:
+                raise TypeError(f"Bad Return Value: {e}") from None
 
         return result
+
+    return wrapper
 
 
 if __name__ == "__main__":
