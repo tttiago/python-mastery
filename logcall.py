@@ -1,12 +1,18 @@
 from functools import wraps
 
 
-def logged(func):
-    print("Adding logging to", func.__name__)
+def logformat(fmt):
+    def logged(func):
+        print(f"Adding logging to {func.__name__}")
 
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        print("Calling", func.__name__)
-        return func(*args, **kwargs)
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            print(fmt.format(func=func))
+            return func(*args, **kwargs)
 
-    return wrapper
+        return wrapper
+
+    return logged
+
+
+logged = logformat("Calling {func.__name__}")
