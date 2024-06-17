@@ -32,6 +32,10 @@ class Structure:
         exec(code, locs)
         cls.__init__ = locs["__init__"]
 
+    @classmethod
+    def __init_subclass__(cls):
+        validate_attributes(cls)
+
 
 def validate_attributes(cls):
     validators = []

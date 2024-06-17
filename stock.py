@@ -1,8 +1,7 @@
-from structure import Structure, validate_attributes
+from structure import Structure
 from validate import PositiveFloat, PositiveInteger, String
 
 
-@validate_attributes
 class Stock(Structure):
     _fields = ("name", "shares", "price")
     name = String()
