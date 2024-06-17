@@ -1,5 +1,6 @@
-import inspect
 import sys
+
+from validate import Validator
 
 
 class Structure:
@@ -30,3 +31,17 @@ class Structure:
         locs = {}
         exec(code, locs)
         cls.__init__ = locs["__init__"]
+
+
+def validate_attributes(cls):
+    validators = []
+    for name, val in vars(cls).items():
+        if isinstance(val, Validator):
+            validators.append(val)
+    cls._fields = [val.name for val in validators]
+
+    # Create the __init__ method
+    if cls._fields:
+        cls.create_init()
+
+    return cls

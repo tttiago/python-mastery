@@ -1,7 +1,8 @@
-from structure import Structure
+from structure import Structure, validate_attributes
 from validate import PositiveFloat, PositiveInteger, String
 
 
+@validate_attributes
 class Stock(Structure):
     _fields = ("name", "shares", "price")
     name = String()
@@ -14,6 +15,3 @@ class Stock(Structure):
 
     def sell(self, nshares):
         self.shares -= nshares
-
-
-Stock.create_init()
