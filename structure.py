@@ -5,6 +5,7 @@ from validate import Validator
 
 class Structure:
     _fields = ()
+    _types = ()
 
     @staticmethod
     def _init():
@@ -22,6 +23,11 @@ class Structure:
             super().__setattr__(name, value)
         else:
             raise AttributeError(f"No attribute {name}")
+
+    @classmethod
+    def from_row(cls, row):
+        rowdata = [func(val) for func, val in zip(cls._types, row)]
+        return cls(*rowdata)
 
     @classmethod
     def create_init(cls):
@@ -42,7 +48,12 @@ def validate_attributes(cls):
     for name, val in vars(cls).items():
         if isinstance(val, Validator):
             validators.append(val)
+
+    # Collect all of the field names.
     cls._fields = [val.name for val in validators]
+
+    # Collect type conversions.
+    cls._types = tuple([getattr(v, "expected_type", lambda x: x) for v in validators])
 
     # Create the __init__ method
     if cls._fields:
