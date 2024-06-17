@@ -1,6 +1,6 @@
 import sys
 
-from validate import Validator
+from validate import Validator, validated
 
 
 class Structure:
@@ -48,6 +48,10 @@ def validate_attributes(cls):
     for name, val in vars(cls).items():
         if isinstance(val, Validator):
             validators.append(val)
+
+        # Apply validated decorator to any callable with annotations.
+        elif callable(val) and val.__annotations__:
+            setattr(cls, name, validated(val))
 
     # Collect all of the field names.
     cls._fields = [val.name for val in validators]
